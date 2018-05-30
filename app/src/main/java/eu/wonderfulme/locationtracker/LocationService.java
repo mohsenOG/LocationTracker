@@ -44,9 +44,20 @@ public class LocationService extends Service {
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) return;
-                for (Location location : locationResult.getLocations()) {
-                    // TODO Write location on db
+                Location location = locationResult.getLastLocation();
+                String timestamp = Utils.getFormattedTime(System.currentTimeMillis());
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                double altitude = -1.;
+                if (location.hasAltitude()) {
+                    location.getAltitude();
                 }
+                float speed = -1.f;
+                if (location.hasSpeed()) {
+                    speed = location.getSpeed();
+                }
+                    // TODO Write location on db
+
             }
         };
 

@@ -44,7 +44,6 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-
     private class RecordFabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -52,10 +51,14 @@ public class MainFragment extends Fragment {
             if (!mIsRecording) {
                 //Handle in case of start.
                 startStopLocationService(true);
+                mRecordPeriodEditText.setEnabled(false);
+                mRecordPeriodEditText.setFocusable(false);
 
             } else {
                 //Handle in case of stop.
                 startStopLocationService(false);
+                mRecordPeriodEditText.setEnabled(true);
+                mRecordPeriodEditText.setFocusable(true);
             }
         }
     }
