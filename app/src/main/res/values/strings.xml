@@ -5,4 +5,7 @@
     <string name="record_period_hint">Recording period (seconds)</string>
     <string name="record_period_text_edit_hint">Period per sec</string>
     <string name="time_period_default_value">10</string>
+
+
+    <string name="pref_is_api_connected" translatable="false">pref_is_api_connected</string>
 </resources>
