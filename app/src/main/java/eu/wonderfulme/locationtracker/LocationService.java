@@ -21,17 +21,18 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
-public class LocationService extends Service {
+public class LocationService extends Service implements LocationListener {
 
     public static final String EXTRA_RECORD_PERIOD = "EXTRA_RECORD_PERIOD";
     private static final String NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_ID";
     private static final int NOTIFICATION_ID = 100;
     private LocationRequest mLocationRequest;
-    private LocationCallback mLocationCallback;
+    private MyLocationCallback mLocationCallback;
     private long mRecordPeriodInSeconds;
 
 
-    public LocationService() { }
+    public LocationService() {
+    }
 
 
     @Override
@@ -40,26 +41,7 @@ public class LocationService extends Service {
 
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) return;
-                Location location = locationResult.getLastLocation();
-                String timestamp = Utils.getFormattedTime(System.currentTimeMillis());
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                double altitude = -1.;
-                if (location.hasAltitude()) {
-                    location.getAltitude();
-                }
-                float speed = -1.f;
-                if (location.hasSpeed()) {
-                    speed = location.getSpeed();
-                }
-                    // TODO Write location on db
-
-            }
-        };
+        mLocationCallback = new MyLocationCallback();
 
     }
 
@@ -68,7 +50,9 @@ public class LocationService extends Service {
         mRecordPeriodInSeconds = intent.getIntExtra(EXTRA_RECORD_PERIOD, 10);
         mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
         //TODO permission request.
-        LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
+        }
 
 
         Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
@@ -92,5 +76,36 @@ public class LocationService extends Service {
     public void onDestroy() {
         super.onDestroy();
         LocationServices.getFusedLocationProviderClient(this).removeLocationUpdates(mLocationCallback);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        mLocationCallback.saveLocationOnDatabase(location);
+    }
+
+    private class MyLocationCallback extends LocationCallback {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            if (locationResult == null) return;
+            Location location = locationResult.getLastLocation();
+            saveLocationOnDatabase(location);
+        }
+
+        void saveLocationOnDatabase(Location location) {
+            String timestamp = Utils.getFormattedTime(System.currentTimeMillis());
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            double altitude = -1.;
+            if (location.hasAltitude()) {
+                location.getAltitude();
+            }
+            float speed = -1.f;
+            if (location.hasSpeed()) {
+                speed = location.getSpeed();
+            }
+            // TODO Write location on db
+
+
+        }
     }
 }
