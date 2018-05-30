@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Location Tracker</string>
+
+    <string name="main_hint">Please choose a record period and click on the button to start.</string>
+    <string name="record_period_hint">Recording period (seconds)</string>
+    <string name="record_period_text_edit_hint">Period per sec</string>
+    <string name="time_period_default_value">10</string>
 </resources>
