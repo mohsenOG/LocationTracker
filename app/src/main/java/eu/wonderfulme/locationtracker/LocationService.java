@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
 
 public class LocationService extends Service implements LocationListener {
 
@@ -49,7 +50,6 @@ public class LocationService extends Service implements LocationListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
         mRecordPeriodInSeconds = intent.getIntExtra(EXTRA_RECORD_PERIOD, 10);
         mLocationRequest.setInterval(mRecordPeriodInSeconds * 1000);
-        //TODO permission request.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
