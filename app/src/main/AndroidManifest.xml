@@ -31,10 +31,6 @@
             android:enabled="true"
             android:exported="false" />
         <!-- Content provicer -->
-        <provider
-            android:name="eu.wonderfulme.locationtracker.database.LocationTrackerContentProvider"
-            android:authorities="eu.wonderfulme.locationtracker"
-            android:exported="false" />
 
     </application>
 
