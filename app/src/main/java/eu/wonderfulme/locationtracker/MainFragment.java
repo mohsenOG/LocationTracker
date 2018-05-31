@@ -22,6 +22,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import eu.wonderfulme.locationtracker.database.LocationDatabase;
 
 
 public class MainFragment extends Fragment {
@@ -126,6 +127,7 @@ public class MainFragment extends Fragment {
             mRecordingButtonListener.onRecordingButtonClicked(false);
             mRecordFab.setImageResource(android.R.drawable.ic_media_play);
             Objects.requireNonNull(getActivity()).stopService(intent);
+            // TODO save all table content to a csv file and delete all db contents.
         }
     }
 

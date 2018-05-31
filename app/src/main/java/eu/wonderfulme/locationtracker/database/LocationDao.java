@@ -10,12 +10,12 @@ import java.util.List;
 public interface LocationDao {
 
     @Insert
-    public void insertSingleRecord(LocationData locationData);
+    void insertSingleRecord(LocationData locationData);
 
     @Query("SELECT * FROM LocationData")
-    public List<LocationData> getAllDbData();
+    List<LocationData> getAllDbData();
 
     @Query("DELETE FROM LocationData")
-    public void deteleAllRecords();
+    void deteleAllRecords();
 
 }

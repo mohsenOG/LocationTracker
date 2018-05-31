@@ -3,9 +3,11 @@ package eu.wonderfulme.locationtracker;
 import android.Manifest;
 import android.app.Notification;
 import android.app.Service;
+import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -22,6 +24,10 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 
+import eu.wonderfulme.locationtracker.database.LocationData;
+import eu.wonderfulme.locationtracker.database.LocationDatabase;
+import eu.wonderfulme.locationtracker.database.RoomDbSingleton;
+
 public class LocationService extends Service implements LocationListener {
 
     public static final String EXTRA_RECORD_PERIOD = "EXTRA_RECORD_PERIOD";
@@ -30,7 +36,6 @@ public class LocationService extends Service implements LocationListener {
     private LocationRequest mLocationRequest;
     private MyLocationCallback mLocationCallback;
     private long mRecordPeriodInSeconds;
-
 
     public LocationService() {
     }
@@ -43,7 +48,6 @@ public class LocationService extends Service implements LocationListener {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationCallback = new MyLocationCallback();
-
     }
 
     @Override
@@ -103,9 +107,22 @@ public class LocationService extends Service implements LocationListener {
             if (location.hasSpeed()) {
                 speed = location.getSpeed();
             }
-            // TODO Write location on db
+            LocationData dbData = new LocationData();
+            dbData.setTimestamp(timestamp);
+            dbData.setLatitude(latitude);
+            dbData.setLongitude(longitude);
+            dbData.setAltitude(altitude);
+            dbData.setSpeed(speed);
 
+            new DatabaseAsync().execute(dbData);
+        }
+    }
 
+    private class DatabaseAsync extends AsyncTask<LocationData, Void, Void> {
+        @Override
+        protected Void doInBackground(LocationData... locationData) {
+            RoomDbSingleton.getInstance(getApplicationContext()).locationDao().insertSingleRecord(locationData[0]);
+            return null;
         }
     }
 }
