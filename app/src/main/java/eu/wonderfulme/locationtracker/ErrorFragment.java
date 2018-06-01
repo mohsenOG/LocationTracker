@@ -13,7 +13,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
 public class ErrorFragment extends Fragment {
 
     public final static String ERROR_MSG_FRAGMENT = "ERROR_MSG_FRAGMENT";

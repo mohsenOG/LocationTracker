@@ -61,7 +61,7 @@ public class ExportAndCleanDbAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (isSuccessful) {
-            mSnackbarMain.setText(mContext.getResources().getString(R.string.snackbar_export_csv_successful) + mFilename).setDuration(Snackbar.LENGTH_LONG);
+            mSnackbarMain.setText(mContext.getResources().getString(R.string.snackbar_export_csv_successful) + " " + mFilename).setDuration(Snackbar.LENGTH_LONG);
             mSnackbarMain.setAction(R.string.snackbar_goto_downloads, new SnackBarOnClickListener(SnackbarActionType.GOTO_DOWNLOADS));
             mSnackbarMain.show();
             // clear DB

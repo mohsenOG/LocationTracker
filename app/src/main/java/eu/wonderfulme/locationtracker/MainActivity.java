@@ -1,6 +1,7 @@
 package eu.wonderfulme.locationtracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,9 +10,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
@@ -26,12 +31,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private boolean mIsRecording = false;
     private GoogleApiClient mGoogleApiClient;
     @BindView(R.id.swipeLayout_main_activity) protected SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.linearLayout_mainActivity) protected LinearLayout mLinearLayout;
+    @BindView(R.id.toolbar_mainActivity) protected Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        setSupportActionBar(mToolbar);
+        setTitle(R.string.app_name);
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
@@ -59,6 +69,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onDestroy() {
         super.onDestroy();
         mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_about:
+                showAbout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -95,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onRefresh() {
         if(mIsRecording) {
-            Snackbar.make(mSwipeRefreshLayout, getResources().getString(R.string.snackbar_refresh_disabled), Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mLinearLayout, getResources().getString(R.string.snackbar_refresh_disabled), Snackbar.LENGTH_SHORT).show();
         } else {
             finish();
             startActivity(getIntent());
@@ -105,5 +133,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onRecordingButtonClicked(boolean isRecording) {
         mIsRecording = isRecording;
+    }
+
+    private void showAbout() {
+        if (mIsRecording) {
+            // Show error to stop at first
+            Snackbar.make(mLinearLayout, R.string.snackbar_goto_about_error, Snackbar.LENGTH_LONG).show();
+        }
+        else {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        }
     }
 }
