@@ -18,6 +18,8 @@ import com.google.android.gms.location.LocationServices;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+//TODO Add about page with an action. look at liscenseing
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
                                                                     SwipeRefreshLayout.OnRefreshListener, MainFragment.RecordingButtonListener{
 
@@ -34,13 +36,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
 
-        FragmentManager fm = getSupportFragmentManager();
 
         // Turn the GPS on
         boolean isGpsOn = Utils.isLocationEnabled(this);
         if (!isGpsOn) {
             ErrorFragment errorFragment = ErrorFragment.newInstance(getString(R.string.error_gps_disabled));
-            fm.beginTransaction().add(R.id.frameLayout_main_fragment, errorFragment).commit();
         }
 
         // Connect to api client.
@@ -50,14 +50,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
-
-        if (mGoogleApiClient.isConnected()) {
-            MainFragment mainFragment = MainFragment.newInstance();
-            fm.beginTransaction().add(R.id.frameLayout_main_fragment, mainFragment).commit();
-        } else {
-            ErrorFragment errorFragment = ErrorFragment.newInstance(getString(R.string.error_google_api_is_not_available));
-            fm.beginTransaction().add(R.id.frameLayout_main_fragment, errorFragment).commit();
-        }
 
         //TODO On saveInstanceState
 
@@ -72,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         setIsApiConnected(true);
+
     }
 
     @Override
@@ -89,6 +82,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(getString(R.string.pref_is_api_connected), isApiConnected);
         editor.apply();
+        FragmentManager fm = getSupportFragmentManager();
+        if (isApiConnected) {
+            MainFragment mainFragment = MainFragment.newInstance();
+            fm.beginTransaction().add(R.id.frameLayout_main_fragment, mainFragment).commit();
+        } else {
+            ErrorFragment errorFragment = ErrorFragment.newInstance(getString(R.string.error_google_api_is_not_available));
+            fm.beginTransaction().add(R.id.frameLayout_main_fragment, errorFragment).commit();
+        }
     }
 
     @Override

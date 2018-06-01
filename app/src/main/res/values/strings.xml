@@ -7,10 +7,18 @@
     <string name="time_period_default_value">10</string>
     <string name="snackbar_refresh_disabled">Refresh is disabled while tracking location.</string>
     <string name="snackbar_location_permission_denied">Our main feature is saving location. Please refresh and try again.</string>
+    <string name="snackbar_export_csv_successful">successful! Please check your Downloads for </string>
+    <string name="snackbar_export_csv_failed">Export failed. Please try again.</string>
     <string name="error_google_api_is_not_available">Something went wrong! Probably there is no Google Services.
     please make sure Google Services is installed and try again.</string>
     <string name="error_imageview_content_description">Error image</string>
     <string name="error_gps_disabled">Location service is off. Please turn it on and refresh the page.</string>
+
+    <string name="table_header_timestamp">timestamp</string>
+    <string name="table_header_latitude">latitude</string>
+    <string name="table_header_longitude">longitude</string>
+    <string name="table_header_altitude">altitude</string>
+    <string name="table_header_speed">speed</string>
 
     <string name="pref_is_api_connected" translatable="false">pref_is_api_connected</string>
 

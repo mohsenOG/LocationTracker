@@ -1,34 +1,42 @@
 package eu.wonderfulme.locationtracker.database;
 
-import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.Context;
+import android.support.annotation.NonNull;
+
+import eu.wonderfulme.locationtracker.R;
 
 @Entity
 public class LocationData {
 
-    @PrimaryKey
-    private int uid;
+    public static String[] getDbHeaders(Context context) {
+        return new String[] {context.getResources().getString(R.string.table_header_timestamp),
+                context.getResources().getString(R.string.table_header_latitude), context.getResources().getString(R.string.table_header_longitude),
+                context.getResources().getString(R.string.table_header_altitude), context.getResources().getString(R.string.table_header_speed)};
+    }
 
+    public static String[] locationCsvRowBuilder(final String timestamp, final double latitude, final double longitude, final double altitude, final float speed) {
+        return new String[] {timestamp, String.valueOf(latitude), String.valueOf(longitude),
+                        String.valueOf(altitude), String.valueOf(speed)};
+
+    }
+
+    @PrimaryKey
+    @NonNull
     private String timestamp;
     private double latitude;
     private double longitude;
     private double altitude;
     private float speed;
 
-    public int getUid() {
-        return uid;
-    }
 
-    public void setUid(int uid) {
-        this.uid = uid;
-    }
-
+    @NonNull
     public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(@NonNull String timestamp) {
         this.timestamp = timestamp;
     }
 

@@ -2,37 +2,34 @@ package eu.wonderfulme.locationtracker;
 
 import android.Manifest;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
-import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.os.Bundle;
+import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
 
 import eu.wonderfulme.locationtracker.database.LocationData;
-import eu.wonderfulme.locationtracker.database.LocationDatabase;
 import eu.wonderfulme.locationtracker.database.RoomDbSingleton;
 
 public class LocationService extends Service implements LocationListener {
 
     public static final String EXTRA_RECORD_PERIOD = "EXTRA_RECORD_PERIOD";
-    private static final String NOTIFICATION_CHANNEL_ID = "NOTIFICATION_CHANNEL_ID";
-    private static final int NOTIFICATION_ID = 100;
+    private static final String NOTIFICATION_CHANNEL_NAME = "NOTIFICATION_CHANNEL_NAME";
+    private static final String NOTIFICATION_CHANNEL_ID = "100";
+    private static final int NOTIFICATION_ID = 110;
     private LocationRequest mLocationRequest;
     private MyLocationCallback mLocationCallback;
     private long mRecordPeriodInSeconds;
@@ -58,15 +55,14 @@ public class LocationService extends Service implements LocationListener {
             LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
 
-
-        Notification notification = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle("This is title")
                 .setContentText("This is content text")
                 .setSmallIcon(R.drawable.launcher_base)
-                .setTicker("This is the ticker")
-                .build();
-
-        startForeground(NOTIFICATION_ID, notification);
+                .setTicker("This is the ticker");
+        createNotificationChannel();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        startForeground(NOTIFICATION_ID, builder.build());
 
         return START_STICKY;
     }
@@ -123,6 +119,19 @@ public class LocationService extends Service implements LocationListener {
         protected Void doInBackground(LocationData... locationData) {
             RoomDbSingleton.getInstance(getApplicationContext()).locationDao().insertSingleRecord(locationData[0]);
             return null;
+        }
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 }

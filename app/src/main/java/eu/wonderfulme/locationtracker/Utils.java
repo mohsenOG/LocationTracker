@@ -21,6 +21,12 @@ public class Utils {
         return simpleDateFormat.format(resultDate);
     }
 
+    static String getFormattedFileName() {
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date resultDate = new Date(System.currentTimeMillis());
+        return simpleDateFormat.format(resultDate) + "_locationTracker.csv";
+    }
+
     /**
      * @return true if online otherwise false.
      * @see https://stackoverflow.com/a/4009133/6072457

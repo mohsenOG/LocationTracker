@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -23,6 +24,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import eu.wonderfulme.locationtracker.database.LocationDatabase;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static eu.wonderfulme.locationtracker.LocationService.EXTRA_RECORD_PERIOD;
 
 
 public class MainFragment extends Fragment {
@@ -44,11 +48,6 @@ public class MainFragment extends Fragment {
     public MainFragment() { }
 
     public static MainFragment newInstance() { return new MainFragment(); }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -79,12 +78,20 @@ public class MainFragment extends Fragment {
     private class RecordFabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+
+            boolean coarseLocationPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED;
+            boolean fineLocationPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
+            boolean writeStoragePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
+
+
+            if (!coarseLocationPermission || !fineLocationPermission || writeStoragePermission) {
+                ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_LOCATION);
+
             } else {
                 handleClick();
             }
+
         }
     }
 
@@ -92,10 +99,10 @@ public class MainFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED && grantResults[1] == PERMISSION_GRANTED) {
                     handleClick();
                 } else {
-                    Snackbar.make(mConstraintLayout, getString(R.string.snackbar_location_permission_denied), Snackbar.LENGTH_SHORT);
+                    Snackbar.make(mConstraintLayout, getString(R.string.snackbar_location_permission_denied), Snackbar.LENGTH_SHORT).show();
                 }
             }
         }
@@ -119,6 +126,8 @@ public class MainFragment extends Fragment {
             mIsRecording = true;
             mRecordingButtonListener.onRecordingButtonClicked(true);
             mRecordFab.setImageResource(android.R.drawable.ic_media_pause);
+            mPeriodInSeconds = Integer.parseInt(mRecordPeriodEditText.getText().toString());
+            intent.putExtra(EXTRA_RECORD_PERIOD, mPeriodInSeconds);
             Objects.requireNonNull(getActivity()).startService(intent);
         } else {
             mRecordPeriodEditText.setEnabled(true);
@@ -127,7 +136,10 @@ public class MainFragment extends Fragment {
             mRecordingButtonListener.onRecordingButtonClicked(false);
             mRecordFab.setImageResource(android.R.drawable.ic_media_play);
             Objects.requireNonNull(getActivity()).stopService(intent);
-            // TODO save all table content to a csv file and delete all db contents.
+            // Save all table content to a csv file and delete all db contents.
+            Snackbar resultSnackbar = Snackbar.make(mConstraintLayout, "", Snackbar.LENGTH_SHORT);
+            ExportAndCleanDbAsyncTask exportAndCleanDb = new ExportAndCleanDbAsyncTask(getActivity().getApplicationContext(), resultSnackbar);
+            exportAndCleanDb.execute();
         }
     }
 
