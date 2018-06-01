@@ -9,6 +9,8 @@
     <string name="snackbar_location_permission_denied">Our main feature is saving location. Please refresh and try again.</string>
     <string name="snackbar_export_csv_successful">successful! Please check your Downloads for </string>
     <string name="snackbar_export_csv_failed">Export failed. Please try again.</string>
+    <string name="snackbar_goto_downloads">Downloads</string>
+    <string name="snackbar_retry">Retry</string>
     <string name="error_google_api_is_not_available">Something went wrong! Probably there is no Google Services.
     please make sure Google Services is installed and try again.</string>
     <string name="error_imageview_content_description">Error image</string>

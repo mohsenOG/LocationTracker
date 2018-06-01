@@ -1,9 +1,12 @@
 package eu.wonderfulme.locationtracker;
 
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.opencsv.CSVWriter;
 
@@ -19,12 +22,12 @@ public class ExportAndCleanDbAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private Context mContext;
     private boolean isSuccessful = false;
-    private Snackbar mSnackbar;
+    private Snackbar mSnackbarMain;
     private String mFilename;
 
     public ExportAndCleanDbAsyncTask(Context context, Snackbar snackbar) {
         mContext = context;
-        mSnackbar = snackbar;
+        mSnackbarMain = snackbar;
     }
 
     @Override
@@ -58,13 +61,16 @@ public class ExportAndCleanDbAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (isSuccessful) {
-            mSnackbar.setText(mContext.getResources().getString(R.string.snackbar_export_csv_successful) + mFilename).setDuration(Snackbar.LENGTH_LONG);
-            mSnackbar.show();
+            mSnackbarMain.setText(mContext.getResources().getString(R.string.snackbar_export_csv_successful) + mFilename).setDuration(Snackbar.LENGTH_LONG);
+            mSnackbarMain.setAction(R.string.snackbar_goto_downloads, new SnackBarOnClickListener(SnackbarActionType.GOTO_DOWNLOADS));
+            mSnackbarMain.show();
             // clear DB
             new NukeDatabaseTask().execute();
         } else {
-            mSnackbar.setText(R.string.snackbar_export_csv_failed).setDuration(Snackbar.LENGTH_LONG);
-            mSnackbar.show();
+            mSnackbarMain.setText(R.string.snackbar_export_csv_failed).setDuration(Snackbar.LENGTH_LONG);
+            //TODO Make retry work!
+            //mSnackbarMain.setAction(R.string.snackbar_retry, new SnackBarOnClickListener(SnackbarActionType.RETRY));
+            mSnackbarMain.show();
         }
 
     }
@@ -74,6 +80,41 @@ public class ExportAndCleanDbAsyncTask extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... voids) {
             RoomDbSingleton.getInstance(mContext).locationDao().deteleAllRecords();
             return null;
+        }
+    }
+
+    private enum SnackbarActionType {
+        RETRY,
+        GOTO_DOWNLOADS,
+        INVALID
+    }
+
+    private class SnackBarOnClickListener implements View.OnClickListener {
+
+        private SnackbarActionType mActionType;
+
+        public SnackBarOnClickListener(SnackbarActionType actionType) {
+            mActionType = actionType;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (mActionType) {
+                case RETRY:
+                    new ExportAndCleanDbAsyncTask(mContext, mSnackbarMain).execute();
+                    mSnackbarMain.dismiss();
+                    break;
+                case GOTO_DOWNLOADS:
+                    Intent dm = new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS);
+                    dm.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(dm);
+                    mSnackbarMain.dismiss();
+                    break;
+                case INVALID:
+                default:
+                    mSnackbarMain.dismiss();
+                    break;
+            }
         }
     }
 }
