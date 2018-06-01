@@ -36,9 +36,9 @@ public class ExportAndCleanDbAsyncTask extends AsyncTask<Void, Void, Void> {
             exportDir.mkdir();
         }
         mFilename = Utils.getFormattedFileName();
-        File file = new File(exportDir, mFilename);
         try {
-            CSVWriter writer = new CSVWriter(new FileWriter(file));
+            String filePath = exportDir.getAbsolutePath() + "/" + mFilename;
+            CSVWriter writer = new CSVWriter(new FileWriter(filePath));
             writer.writeNext(LocationData.getDbHeaders(mContext));
             for (LocationData data: dataList) {
                 String[] dbRow = LocationData.locationCsvRowBuilder(data.getTimestamp(), data.getLatitude(),
@@ -58,13 +58,22 @@ public class ExportAndCleanDbAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (isSuccessful) {
-            mSnackbar.setText(mContext.getResources().getString(R.string.snackbar_export_csv_successful) + mFilename);
+            mSnackbar.setText(mContext.getResources().getString(R.string.snackbar_export_csv_successful) + mFilename).setDuration(Snackbar.LENGTH_LONG);
             mSnackbar.show();
-            RoomDbSingleton.getInstance(mContext).locationDao().deteleAllRecords();
+            // clear DB
+            new NukeDatabaseTask().execute();
         } else {
-            mSnackbar.setText(R.string.snackbar_export_csv_failed);
+            mSnackbar.setText(R.string.snackbar_export_csv_failed).setDuration(Snackbar.LENGTH_LONG);
             mSnackbar.show();
         }
 
+    }
+
+    private class NukeDatabaseTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            RoomDbSingleton.getInstance(mContext).locationDao().deteleAllRecords();
+            return null;
+        }
     }
 }

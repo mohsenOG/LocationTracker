@@ -84,7 +84,7 @@ public class MainFragment extends Fragment {
             boolean writeStoragePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
 
 
-            if (!coarseLocationPermission || !fineLocationPermission || writeStoragePermission) {
+            if (!coarseLocationPermission || !fineLocationPermission || !writeStoragePermission) {
                 ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_LOCATION);
 

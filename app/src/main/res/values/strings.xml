@@ -14,6 +14,9 @@
     <string name="error_imageview_content_description">Error image</string>
     <string name="error_gps_disabled">Location service is off. Please turn it on and refresh the page.</string>
 
+    <string name="notification_locationservice_title">Recording Location</string>
+    <string name="notification_locationservice_content">Please remove this notification only from the app itself :)</string>
+
     <string name="table_header_timestamp">timestamp</string>
     <string name="table_header_latitude">latitude</string>
     <string name="table_header_longitude">longitude</string>
