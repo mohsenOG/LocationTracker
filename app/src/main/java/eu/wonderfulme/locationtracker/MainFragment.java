@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.BinderThread;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.Objects;
 
@@ -40,6 +44,7 @@ public class MainFragment extends Fragment {
     @BindView(R.id.fab_start_stop_record) protected FloatingActionButton mRecordFab;
     private RecordingButtonListener mRecordingButtonListener;
     @BindView(R.id.constraintLayout_main_fragment) protected ConstraintLayout mConstraintLayout;
+    @BindView(R.id.adView_banner_main_fragment) protected AdView mAdView;
 
     public interface RecordingButtonListener {
         void onRecordingButtonClicked(boolean isRecording);
@@ -54,6 +59,11 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
+
+        // Init admob
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         mRecordFab.setOnClickListener(new RecordFabClickListener());
         mPeriodInSeconds = Integer.parseInt(mRecordPeriodEditText.getText().toString());
         return view;

@@ -16,6 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -33,26 +37,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @BindView(R.id.swipeLayout_main_activity) protected SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.linearLayout_mainActivity) protected LinearLayout mLinearLayout;
     @BindView(R.id.toolbar_mainActivity) protected Toolbar mToolbar;
+    private InterstitialAd mInterstitialAd;
+    private AdRequest mAdRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // init Admob
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
+        //
         ButterKnife.bind(this);
-
         setSupportActionBar(mToolbar);
         setTitle(R.string.app_name);
-
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-
-
+        //init interstitialAd
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdListener(new AboutActivityAdListener());
+        mAdRequest = new AdRequest.Builder().build();
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
         // Turn the GPS on
         boolean isGpsOn = Utils.isLocationEnabled(this);
         if (!isGpsOn) {
             ErrorFragment errorFragment = ErrorFragment.newInstance(getString(R.string.error_gps_disabled));
         }
-
         // Connect to api client.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -62,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mGoogleApiClient.connect();
 
         //TODO On saveInstanceState
-
     }
 
     @Override
@@ -80,10 +89,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        mInterstitialAd.loadAd(mAdRequest);
         switch (item.getItemId()) {
-            case R.id.menu_item_about:
-                showAbout();
+            case R.id.menu_item_about: {
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    showAbout();
+                }
                 return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -144,5 +159,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
         }
+    }
+
+    private class AboutActivityAdListener extends AdListener {
+        @Override
+        public void onAdClosed() {
+            showAbout();
+        }
+
+        @Override
+        public void onAdFailedToLoad(int i) {
+            showAbout();
+        }
+
     }
 }

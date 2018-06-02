@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Location Tracker</string>
     <string name="about_activity_label">About</string>
+    <!-- TODO Add real app Id and banner unit id -->
+    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="admob_banner_unit_id_main_fragment" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="admob_interstitial_unit_id_about" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+
 
     <string name="main_hint">Please choose a record period and click on the button to start.</string>
     <string name="record_period_hint">Recording period (seconds)</string>
