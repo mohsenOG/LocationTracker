@@ -3,9 +3,11 @@ package eu.wonderfulme.locationtracker;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -27,10 +29,10 @@ import com.google.android.gms.location.LocationServices;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//TODO Add about page with an action. look at liscenseing
-
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
                                                                     SwipeRefreshLayout.OnRefreshListener, MainFragment.RecordingButtonListener{
+
+    private static final String SAVE_STATE_IS_RECORDING = "SAVE_STATE_IS_RECORDING";
 
     private boolean mIsRecording = false;
     private GoogleApiClient mGoogleApiClient;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @BindView(R.id.toolbar_mainActivity) protected Toolbar mToolbar;
     private InterstitialAd mInterstitialAd;
     private AdRequest mAdRequest;
+    private Fragment mMainFragment;
+    private Fragment mErrorFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +62,43 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mInterstitialAd.setAdListener(new AboutActivityAdListener());
         mAdRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        //SaveInstance
+        if (savedInstanceState != null) {
+            mIsRecording = savedInstanceState.getBoolean(SAVE_STATE_IS_RECORDING);
+            mErrorFragment = getSupportFragmentManager().getFragment(savedInstanceState, "main fragment");
+            mMainFragment = getSupportFragmentManager().getFragment(savedInstanceState, "error fragment");
+        }
+
         // Turn the GPS on
         boolean isGpsOn = Utils.isLocationEnabled(this);
         if (!isGpsOn) {
+            // TODO make this GPS-check work.
             ErrorFragment errorFragment = ErrorFragment.newInstance(getString(R.string.error_gps_disabled));
         }
         // Connect to api client.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        mGoogleApiClient.connect();
+        if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+            mGoogleApiClient.connect();
+        }
 
-        //TODO On saveInstanceState
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        getSupportFragmentManager().putFragment(outState, "main fragment", mMainFragment);
+        getSupportFragmentManager().putFragment(outState, "error fragment", mErrorFragment);
+        outState.putBoolean(SAVE_STATE_IS_RECORDING, mIsRecording);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mInterstitialAd.loadAd(mAdRequest);
     }
 
     @Override
@@ -89,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        mInterstitialAd.loadAd(mAdRequest);
         switch (item.getItemId()) {
             case R.id.menu_item_about: {
                 if (mInterstitialAd.isLoaded()) {
@@ -106,30 +132,30 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        setIsApiConnected(true);
+        checkApiConnectionAndShowFragments(true);
 
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        setIsApiConnected(false);
+        checkApiConnectionAndShowFragments(false);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        setIsApiConnected(false);
+        checkApiConnectionAndShowFragments(false);
     }
 
-    private void setIsApiConnected(boolean isApiConnected) {
+    private void checkApiConnectionAndShowFragments(boolean isApiConnected) {
         SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(getString(R.string.pref_is_api_connected), isApiConnected);
         editor.apply();
         FragmentManager fm = getSupportFragmentManager();
-        if (isApiConnected) {
+        if (isApiConnected && mMainFragment == null) {
             MainFragment mainFragment = MainFragment.newInstance();
             fm.beginTransaction().add(R.id.frameLayout_main_fragment, mainFragment).commit();
-        } else {
+        } else if (mErrorFragment == null) {
             ErrorFragment errorFragment = ErrorFragment.newInstance(getString(R.string.error_google_api_is_not_available));
             fm.beginTransaction().add(R.id.frameLayout_main_fragment, errorFragment).commit();
         }
