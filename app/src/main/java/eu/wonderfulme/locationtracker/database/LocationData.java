@@ -22,6 +22,14 @@ public class LocationData {
 
     }
 
+    public LocationData(@NonNull String timestamp, double latitude, double longitude, double altitude, float speed) {
+        this.timestamp = timestamp;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
+        this.speed = speed;
+    }
+
     @PrimaryKey
     @NonNull
     private String timestamp;

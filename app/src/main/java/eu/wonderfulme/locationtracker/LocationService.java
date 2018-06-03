@@ -1,6 +1,7 @@
 package eu.wonderfulme.locationtracker;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -34,14 +35,9 @@ public class LocationService extends Service implements LocationListener {
     private MyLocationCallback mLocationCallback;
     private long mRecordPeriodInSeconds;
 
-    public LocationService() {
-    }
-
-
     @Override
     public void onCreate() {
         super.onCreate();
-
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationCallback = new MyLocationCallback();
@@ -102,17 +98,12 @@ public class LocationService extends Service implements LocationListener {
             if (location.hasSpeed()) {
                 speed = location.getSpeed();
             }
-            LocationData dbData = new LocationData();
-            dbData.setTimestamp(timestamp);
-            dbData.setLatitude(latitude);
-            dbData.setLongitude(longitude);
-            dbData.setAltitude(altitude);
-            dbData.setSpeed(speed);
-
+            LocationData dbData = new LocationData(timestamp, latitude, longitude, altitude, speed);
             new DatabaseAsync().execute(dbData);
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class DatabaseAsync extends AsyncTask<LocationData, Void, Void> {
         @Override
         protected Void doInBackground(LocationData... locationData) {
@@ -122,15 +113,13 @@ public class LocationService extends Service implements LocationListener {
     }
 
     private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, importance);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
         }
     }
 }

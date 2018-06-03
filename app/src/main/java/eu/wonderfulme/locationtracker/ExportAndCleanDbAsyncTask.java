@@ -1,5 +1,6 @@
 package eu.wonderfulme.locationtracker;
 
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import eu.wonderfulme.locationtracker.database.RoomDbSingleton;
 
 public class ExportAndCleanDbAsyncTask extends AsyncTask<Void, Void, Void> {
 
+    @SuppressLint("StaticFieldLeak")
     private Context mContext;
     private boolean isSuccessful = false;
     private Snackbar mSnackbarMain;
