@@ -1,13 +1,9 @@
 package eu.wonderfulme.locationtracker;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +25,8 @@ import com.google.android.gms.location.LocationServices;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+//TODO W/Ads: Loading already in progress, saving this object for future refreshes.
+
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
                                                                     SwipeRefreshLayout.OnRefreshListener, MainFragment.RecordingButtonListener{
 
@@ -41,8 +39,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @BindView(R.id.toolbar_mainActivity) protected Toolbar mToolbar;
     private InterstitialAd mInterstitialAd;
     private AdRequest mAdRequest;
-    private Fragment mMainFragment;
-    private Fragment mErrorFragment;
+    private MainFragment mMainFragment;
+    private ErrorFragment mErrorFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         //SaveInstance
         if (savedInstanceState != null) {
             mIsRecording = savedInstanceState.getBoolean(SAVE_STATE_IS_RECORDING);
-            mErrorFragment = getSupportFragmentManager().getFragment(savedInstanceState, "main fragment");
-            mMainFragment = getSupportFragmentManager().getFragment(savedInstanceState, "error fragment");
+            mErrorFragment = (ErrorFragment) getSupportFragmentManager().getFragment(savedInstanceState, "error fragment");
+            mMainFragment = (MainFragment) getSupportFragmentManager().getFragment(savedInstanceState, "main fragment");
         }
 
         // Turn the GPS on
@@ -88,11 +86,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-        getSupportFragmentManager().putFragment(outState, "main fragment", mMainFragment);
-        getSupportFragmentManager().putFragment(outState, "error fragment", mErrorFragment);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putBoolean(SAVE_STATE_IS_RECORDING, mIsRecording);
+        if (mMainFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "main fragment", mMainFragment);
+        }
+        if (mErrorFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "error fragment", mErrorFragment);
+        }
     }
 
     @Override
@@ -147,17 +149,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void checkApiConnectionAndShowFragments(boolean isApiConnected) {
-        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(getString(R.string.pref_is_api_connected), isApiConnected);
-        editor.apply();
         FragmentManager fm = getSupportFragmentManager();
         if (isApiConnected && mMainFragment == null) {
-            MainFragment mainFragment = MainFragment.newInstance();
-            fm.beginTransaction().add(R.id.frameLayout_main_fragment, mainFragment).commit();
-        } else if (mErrorFragment == null) {
-            ErrorFragment errorFragment = ErrorFragment.newInstance(getString(R.string.error_google_api_is_not_available));
-            fm.beginTransaction().add(R.id.frameLayout_main_fragment, errorFragment).commit();
+            mMainFragment = MainFragment.newInstance();
+            fm.beginTransaction().replace(R.id.frameLayout_main_fragment, mMainFragment).commit();
+        } else if (!isApiConnected && mErrorFragment == null) {
+            mErrorFragment = ErrorFragment.newInstance(getString(R.string.error_google_api_is_not_available));
+            fm.beginTransaction().replace(R.id.frameLayout_main_fragment, mMainFragment).commit();
         }
     }
 

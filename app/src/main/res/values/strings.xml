@@ -18,6 +18,7 @@
     <string name="snackbar_goto_downloads">Downloads</string>
     <string name="snackbar_retry">Retry</string>
     <string name="snackbar_goto_about_error">Please stop recording to visit about page.</string>
+    <string name="snackbar_put_app_in_background">Now you can put app in background!</string>
     <string name="error_google_api_is_not_available">Something went wrong! Probably there is no Google Services.
     please make sure Google Services is installed and try again.</string>
     <string name="error_imageview_content_description">Error image</string>
@@ -33,7 +34,5 @@
     <string name="table_header_speed">speed</string>
 
     <string name="menu_item_about">About</string>
-
-    <string name="pref_is_api_connected" translatable="false">pref_is_api_connected</string>
 
 </resources>

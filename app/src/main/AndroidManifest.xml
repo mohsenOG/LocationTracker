@@ -38,8 +38,6 @@
             android:name=".LocationService"
             android:enabled="true"
             android:exported="false" />
-        <!-- Content provicer -->
-
     </application>
 
 </manifest>

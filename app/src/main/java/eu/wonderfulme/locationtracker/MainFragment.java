@@ -37,9 +37,11 @@ import static eu.wonderfulme.locationtracker.LocationService.EXTRA_RECORD_PERIOD
 public class MainFragment extends Fragment {
 
 
-    private final int MY_PERMISSIONS_REQUEST_LOCATION = 110;
+    private static final String SAVE_STATE_IS_RECORDING = "SAVE_STATE_IS_RECORDING";
+    private static final String SAVE_STATE_PERIOD_IN_SECOND = "SAVE_STATE_PERIOD_IN_SECOND";
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 110;
 
-    private boolean mIsRecording = false;
+    private boolean mIsRecording;
     private int mPeriodInSeconds;
     @BindView(R.id.editText_record_period) protected EditText mRecordPeriodEditText;
     @BindView(R.id.fab_start_stop_record) protected FloatingActionButton mRecordFab;
@@ -61,6 +63,8 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
 
+        mIsRecording = false;
+
         // Init admob
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -74,14 +78,24 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            // TODO Restore here!
+            mIsRecording = savedInstanceState.getBoolean(SAVE_STATE_IS_RECORDING);
+            mPeriodInSeconds = savedInstanceState.getInt(SAVE_STATE_PERIOD_IN_SECOND);
+            // Restore FAB and editText
+            if (mIsRecording) {
+                mRecordPeriodEditText.setEnabled(false);
+                mRecordPeriodEditText.setFocusable(false);
+                mRecordingButtonListener.onRecordingButtonClicked(true);
+                mRecordFab.setImageResource(android.R.drawable.ic_media_pause);
+            }
+
         }
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        //TODO Save instance here.
+        outState.putBoolean(SAVE_STATE_IS_RECORDING, mIsRecording);
+        outState.putInt(SAVE_STATE_PERIOD_IN_SECOND, mPeriodInSeconds);
     }
 
     @Override
@@ -154,6 +168,7 @@ public class MainFragment extends Fragment {
             mPeriodInSeconds = Integer.parseInt(mRecordPeriodEditText.getText().toString());
             intent.putExtra(EXTRA_RECORD_PERIOD, mPeriodInSeconds);
             Objects.requireNonNull(getActivity()).startService(intent);
+            Snackbar.make(mConstraintLayout, getString(R.string.snackbar_put_app_in_background), Snackbar.LENGTH_SHORT).show();
         } else {
             mRecordPeriodEditText.setEnabled(true);
             mRecordPeriodEditText.setFocusable(true);
