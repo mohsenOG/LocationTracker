@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">رد پا</string>
+    <string name="about_activity_label">درباره</string>
+
+    <string name="main_hint">یه بازه زمانی انتخاب کن و دکمه رو فشار بده.</string>
+    <string name="record_period_hint">بازه ضبط مکان (ثانیه)</string>
+    <string name="record_period_text_edit_hint">ثانیه</string>
+    <string name="time_period_default_value">10</string>
+    <string name="snackbar_refresh_disabled">تازه ردن موقع ضبط مکان ممنوعه!</string>
+    <string name="snackbar_location_permission_denied">کار اصلی اپ ما گرفتن مکانه. یک بار دیگه صفحه رو پایین بکش.</string>
+    <string name="snackbar_export_csv_successful">ذخیره شد</string>
+    <string name="snackbar_export_csv_failed">نوشتن موفق نبود. یک ببار دیگه امتحان کن</string>
+    <string name="snackbar_goto_downloads">دانلودها</string>
+    <string name="snackbar_retry">تلاش دوباره</string>
+    <string name="snackbar_goto_about_error">دیدن درباره هنگام ضبط ممکن نیست</string>
+    <string name="snackbar_put_app_in_background">حا می تونید اپ را در بک گراند قرار دهید</string>
+    <string name="error_google_api_is_not_available">مشکلی پیش اومده. احتمالا توی اکانت گوگل داخل نشدی. اول توی گوگل وارد شو و بیا دوباره امتجان کن</string>
+    <string name="error_imageview_content_description">خطا</string>
+    <string name="error_gps_disabled">مکان یاب شما خاموش است. لطفا ابتدا روشنش و دوباره امتجان کن.</string>
+
+    <string name="notification_locationservice_title">ضبط مکان</string>
+    <string name="notification_locationservice_content">بعد از پایان ضبط بسته میشه :)</string>
+
+    <string name="menu_item_about">درباره</string>
+
+</resources>

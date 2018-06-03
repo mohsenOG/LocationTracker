@@ -27,11 +27,11 @@
     <string name="notification_locationservice_title">Recording Location</string>
     <string name="notification_locationservice_content">Please remove this notification only from the app itself :)</string>
 
-    <string name="table_header_timestamp">timestamp</string>
-    <string name="table_header_latitude">latitude</string>
-    <string name="table_header_longitude">longitude</string>
-    <string name="table_header_altitude">altitude</string>
-    <string name="table_header_speed">speed</string>
+    <string name="table_header_timestamp" translatable="false">timestamp</string>
+    <string name="table_header_latitude" translatable="false">latitude</string>
+    <string name="table_header_longitude" translatable="false">longitude</string>
+    <string name="table_header_altitude" translatable="false">altitude</string>
+    <string name="table_header_speed" translatable="false">speed</string>
 
     <string name="menu_item_about">About</string>
 

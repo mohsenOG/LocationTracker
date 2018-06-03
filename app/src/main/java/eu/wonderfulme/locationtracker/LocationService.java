@@ -58,10 +58,9 @@ public class LocationService extends Service implements LocationListener {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(getString(R.string.notification_locationservice_title))
                 .setContentText(getString(R.string.notification_locationservice_content))
-                .setSmallIcon(R.drawable.launcher_base)
+                .setSmallIcon(R.drawable.notification)
                 .setColor(getResources().getColor(R.color.colorAccent));
         createNotificationChannel();
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         startForeground(NOTIFICATION_ID, builder.build());
 
         return START_STICKY;
