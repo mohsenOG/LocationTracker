@@ -25,8 +25,6 @@ import com.google.android.gms.location.LocationServices;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//TODO W/Ads: Loading already in progress, saving this object for future refreshes.
-
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
                                                                     SwipeRefreshLayout.OnRefreshListener, MainFragment.RecordingButtonListener{
 
@@ -41,11 +39,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private AdRequest mAdRequest;
     private MainFragment mMainFragment;
     private ErrorFragment mErrorFragment;
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //TODO W/Ads: Loading already in progress, saving this object for future refreshes.
         // init Admob
         MobileAds.initialize(this, getString(R.string.admob_app_id));
         //
@@ -66,13 +66,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             mErrorFragment = (ErrorFragment) getSupportFragmentManager().getFragment(savedInstanceState, "error fragment");
             mMainFragment = (MainFragment) getSupportFragmentManager().getFragment(savedInstanceState, "main fragment");
         }
-
+        mFragmentManager = getSupportFragmentManager();
         // Turn the GPS on
         boolean isGpsOn = Utils.isLocationEnabled(this);
         if (!isGpsOn) {
-            // TODO make this GPS-check work.
-            ErrorFragment errorFragment = ErrorFragment.newInstance(getString(R.string.error_gps_disabled));
+            mErrorFragment = ErrorFragment.newInstance(getString(R.string.error_gps_disabled));
+            mFragmentManager.beginTransaction().replace(R.id.frameLayout_main_fragment, mErrorFragment).commit();
         }
+
         // Connect to api client.
         if (mGoogleApiClient == null || !mGoogleApiClient.isConnected()) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -149,13 +150,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void checkApiConnectionAndShowFragments(boolean isApiConnected) {
-        FragmentManager fm = getSupportFragmentManager();
-        if (isApiConnected && mMainFragment == null) {
+        if (isApiConnected && mMainFragment == null && mErrorFragment == null) {
             mMainFragment = MainFragment.newInstance();
-            fm.beginTransaction().replace(R.id.frameLayout_main_fragment, mMainFragment).commit();
+            mFragmentManager.beginTransaction().replace(R.id.frameLayout_main_fragment, mMainFragment).commit();
         } else if (!isApiConnected && mErrorFragment == null) {
             mErrorFragment = ErrorFragment.newInstance(getString(R.string.error_google_api_is_not_available));
-            fm.beginTransaction().replace(R.id.frameLayout_main_fragment, mMainFragment).commit();
+            mFragmentManager.beginTransaction().replace(R.id.frameLayout_main_fragment, mErrorFragment).commit();
         }
     }
 

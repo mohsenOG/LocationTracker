@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AboutActivity">
@@ -14,5 +15,101 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+    <TextView
+        android:id="@+id/tv_about_myApp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_less"
+        android:text="@string/about_my_app"
+        android:textStyle="bold"
+        style="@android:style/TextAppearance.DeviceDefault.Large" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_about_trademark"
+        android:layout_margin="@dimen/margin_less"
+        android:layout_marginBottom="@dimen/margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/about_trademark"
+        style="@android:style/TextAppearance.DeviceDefault.Medium" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_about_found_bug"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_less"
+                    android:text="@string/about_found_bug"
+                    style="@android:style/TextAppearance.DeviceDefault.Small" />
+
+                <TextView
+                    android:id="@+id/tv_about_found_bug_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_less"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:text="@string/about_found_bug_email" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_less"
+                android:layout_marginBottom="@dimen/margin"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:text="@string/about_app_lisence" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_less"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:text="@string/about_used_library_title" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_about_openCSV_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_less"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:textStyle="bold"
+                android:text="@string/about_opencsv_website" />
+
+            <TextView
+                android:id="@+id/tv_about_openCSV_license"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_less"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:text="@string/about_opencsv_license" />
+
+
+        </LinearLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+</LinearLayout>

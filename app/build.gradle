@@ -32,7 +32,7 @@ dependencies {
     implementation "com.google.firebase:firebase-ads:$play_services_version"
     implementation "com.google.android.gms:play-services-ads:$play_services_version"
     implementation 'com.jakewharton:butterknife:8.7.0'
-    implementation 'com.google.firebase:firebase-crash:11.8.0'
+    implementation 'com.google.firebase:firebase-crash:16.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     implementation "android.arch.persistence.room:runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"

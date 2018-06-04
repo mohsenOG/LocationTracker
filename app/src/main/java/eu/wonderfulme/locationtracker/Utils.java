@@ -24,7 +24,7 @@ public class Utils {
     static String getFormattedFileName() {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         Date resultDate = new Date(System.currentTimeMillis());
-        return simpleDateFormat.format(resultDate) + "_locationTracker.csv";
+        return simpleDateFormat.format(resultDate) + "_output.csv";
     }
 
     /**
@@ -40,7 +40,7 @@ public class Utils {
     }
 
     public static boolean isLocationEnabled(Context context) {
-        int locationMode = 0;
+        int locationMode;
         String locationProviders;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -48,7 +48,6 @@ public class Utils {
                 locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
 
             } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
                 return false;
             }
 

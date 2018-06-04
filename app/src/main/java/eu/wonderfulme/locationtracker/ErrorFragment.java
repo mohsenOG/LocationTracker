@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -19,6 +22,9 @@ public class ErrorFragment extends Fragment {
 
     private String mErrorMsg;
     @BindView(R.id.textView_error) TextView mErrorTextView;
+
+    @BindView(R.id.adView_banner_error_fragment) protected AdView mAdView;
+
 
     public ErrorFragment() { }
 
@@ -44,6 +50,9 @@ public class ErrorFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_error, container, false);
         ButterKnife.bind(this, view);
         mErrorTextView.setText(mErrorMsg);
+        // Init admob
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         return view;
     }
 
