@@ -4,10 +4,7 @@ package eu.wonderfulme.locationtracker;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.BinderThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -28,7 +25,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import eu.wonderfulme.locationtracker.database.LocationDatabase;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static eu.wonderfulme.locationtracker.LocationService.EXTRA_RECORD_PERIOD;

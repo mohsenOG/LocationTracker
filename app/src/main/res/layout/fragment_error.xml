@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toTopOf="@id/horizontal_0_35"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:contentDescription="@string/error_imageview_content_description" />
+        android:contentDescription="@string/error_imageView_content_description" />
 
     <android.support.constraint.Guideline
         android:id="@+id/horizontal_0_35"

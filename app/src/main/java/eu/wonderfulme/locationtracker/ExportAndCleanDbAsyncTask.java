@@ -77,10 +77,11 @@ public class ExportAndCleanDbAsyncTask extends AsyncTask<Void, Void, Void> {
 
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class NukeDatabaseTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            RoomDbSingleton.getInstance(mContext).locationDao().deteleAllRecords();
+            RoomDbSingleton.getInstance(mContext).locationDao().deleteAllRecords();
             return null;
         }
     }

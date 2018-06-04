@@ -22,7 +22,7 @@
     <string name="snackbar_put_app_in_background">Now you can put app in background!</string>
     <string name="error_google_api_is_not_available">Something went wrong! Probably there is no Google Services.
     please make sure Google Services is installed and try again.</string>
-    <string name="error_imageview_content_description">Error image</string>
+    <string name="error_imageView_content_description">Error image</string>
     <string name="error_gps_disabled">Location service is off. Please turn it on and refresh the page.</string>
 
     <string name="notification_locationservice_title">Recording Location</string>
@@ -39,9 +39,9 @@
     <string name="about_trademark" translatable="false">\u00A9 2018 Mohsen Oghbaei - WonderfulMe.eu</string>
     <string name="about_found_bug" translatable="false">Found a bug? let us know:</string>
     <string name="about_found_bug_email" translatable="false">info@wonderfulme.eu</string>
-    <string name="about_app_lisence" translatable="false">Location Tracker is released under Apache version 2.0.</string>
+    <string name="about_app_license" translatable="false">Location Tracker is released under Apache version 2.0.</string>
     <string name="about_used_library_title" translatable="false">Location Tracker uses the following open-source libraries:</string>
-    <string name="about_opencsv_website" translatable="false"><a href="http://opencsv.sourceforge.net">OpenCSV</a></string>
+    <string name="about_openCsv_website" translatable="false"><a href="http://opencsv.sourceforge.net">OpenCSV</a></string>
     <string name="about_opencsv_license" translatable="false"><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License Version 2.0</a></string>
 
 

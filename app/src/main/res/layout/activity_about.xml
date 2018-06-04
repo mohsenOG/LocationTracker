@@ -71,7 +71,7 @@
                 android:layout_margin="@dimen/margin_less"
                 android:layout_marginBottom="@dimen/margin"
                 style="@android:style/TextAppearance.DeviceDefault.Small"
-                android:text="@string/about_app_lisence" />
+                android:text="@string/about_app_license" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                 android:layout_margin="@dimen/margin_less"
                 style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:textStyle="bold"
-                android:text="@string/about_opencsv_website" />
+                android:text="@string/about_openCsv_website" />
 
             <TextView
                 android:id="@+id/tv_about_openCSV_license"

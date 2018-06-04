@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 
 public class ErrorFragment extends Fragment {
 
-    public final static String ERROR_MSG_FRAGMENT = "ERROR_MSG_FRAGMENT";
+    private final static String ERROR_MSG_FRAGMENT = "ERROR_MSG_FRAGMENT";
 
     private String mErrorMsg;
     @BindView(R.id.textView_error) TextView mErrorTextView;

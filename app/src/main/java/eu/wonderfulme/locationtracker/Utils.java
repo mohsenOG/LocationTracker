@@ -27,18 +27,6 @@ public class Utils {
         return simpleDateFormat.format(resultDate) + "_output.csv";
     }
 
-    /**
-     * @return true if online otherwise false.
-     * @see https://stackoverflow.com/a/4009133/6072457
-     */
-    @SuppressWarnings("JavadocReference")
-    public static boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) return false;
-        NetworkInfo info = cm.getActiveNetworkInfo();
-        return info != null && info.isConnected();
-    }
-
     public static boolean isLocationEnabled(Context context) {
         int locationMode;
         String locationProviders;

@@ -15,7 +15,7 @@
     <string name="snackbar_goto_about_error">دیدن درباره هنگام ضبط ممکن نیست</string>
     <string name="snackbar_put_app_in_background">حا می تونید اپ را در بک گراند قرار دهید</string>
     <string name="error_google_api_is_not_available">مشکلی پیش اومده. احتمالا توی اکانت گوگل داخل نشدی. اول توی گوگل وارد شو و بیا دوباره امتجان کن</string>
-    <string name="error_imageview_content_description">خطا</string>
+    <string name="error_imageView_content_description">خطا</string>
     <string name="error_gps_disabled">مکان یاب شما خاموش است. لطفا ابتدا روشنش و دوباره امتجان کن.</string>
 
     <string name="notification_locationservice_title">ضبط مکان</string>

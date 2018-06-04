@@ -16,6 +16,6 @@ public interface LocationDao {
     List<LocationData> getAllDbData();
 
     @Query("DELETE FROM LocationData")
-    void deteleAllRecords();
+    void deleteAllRecords();
 
 }
