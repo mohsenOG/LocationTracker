@@ -190,10 +190,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             showAbout();
         }
 
-        @Override
-        public void onAdFailedToLoad(int i) {
-            showAbout();
-        }
-
     }
 }
