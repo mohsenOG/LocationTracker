@@ -2,8 +2,6 @@ package eu.wonderfulme.locationtracker;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
