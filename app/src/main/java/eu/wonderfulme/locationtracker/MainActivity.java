@@ -45,18 +45,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //TODO W/Ads: Loading already in progress, saving this object for future refreshes.
-        // init Admob
-        MobileAds.initialize(this, getString(R.string.admob_app_id));
-        //
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         setTitle(R.string.app_name);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         mSwipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        //TODO W/Ads: Loading already in progress, saving this object for future refreshes.
+        // init Admob
+        MobileAds.initialize(this, getString(R.string.admob_app_id));
         //init interstitialAd
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId(getString(R.string.admob_interstitial_unit_id_about));
         mInterstitialAd.setAdListener(new AboutActivityAdListener());
         mAdRequest = new AdRequest.Builder().build();
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
