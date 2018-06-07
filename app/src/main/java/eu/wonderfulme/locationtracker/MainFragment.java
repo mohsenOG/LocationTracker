@@ -31,8 +31,6 @@ import static eu.wonderfulme.locationtracker.LocationService.EXTRA_RECORD_PERIOD
 
 
 public class MainFragment extends Fragment {
-
-
     private static final String SAVE_STATE_IS_RECORDING = "SAVE_STATE_IS_RECORDING";
     private static final String SAVE_STATE_PERIOD_IN_SECOND = "SAVE_STATE_PERIOD_IN_SECOND";
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 110;
@@ -113,11 +111,9 @@ public class MainFragment extends Fragment {
     private class RecordFabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-
             boolean coarseLocationPermission = ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED;
             boolean fineLocationPermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED;
             boolean writeStoragePermission = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
-
 
             if (!coarseLocationPermission || !fineLocationPermission || !writeStoragePermission) {
                 ActivityCompat.requestPermissions(Objects.requireNonNull(getActivity()), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,

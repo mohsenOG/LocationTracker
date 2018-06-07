@@ -80,36 +80,31 @@
                 style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:text="@string/about_used_library_title" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_about_openCSV_website"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_less"
-                style="@android:style/TextAppearance.DeviceDefault.Small"
-                android:textStyle="bold"
-                android:text="@string/about_openCsv_website" />
+                <TextView
+                    android:id="@+id/tv_about_openCSV_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_less"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:textStyle="bold"
+                    android:text="@string/about_openCsv_website" />
 
-            <TextView
-                android:id="@+id/tv_about_openCSV_license"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_less"
-                style="@android:style/TextAppearance.DeviceDefault.Small"
-                android:text="@string/about_opencsv_license" />
-
-
-        </LinearLayout>
-
+                <TextView
+                    android:id="@+id/tv_about_openCSV_license"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_less"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:text="@string/about_opencsv_license" />
+            </LinearLayout>
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-
 
 </LinearLayout>

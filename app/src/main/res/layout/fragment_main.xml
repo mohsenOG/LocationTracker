@@ -15,8 +15,8 @@
         android:text="@string/main_hint"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/horizontal_0_2" />
 
     <android.support.constraint.Guideline
@@ -34,8 +34,8 @@
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/record_period_hint"
         app:layout_constraintBottom_toTopOf="@+id/horizontal_0_4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/editText_record_period"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/editText_record_period"
         app:layout_constraintTop_toBottomOf="@id/horizontal_0_2" />
 
     <EditText
@@ -48,8 +48,8 @@
         android:inputType="numberDecimal"
         android:layout_margin="@dimen/margin"
         app:layout_constraintTop_toBottomOf="@id/horizontal_0_2"
-        app:layout_constraintLeft_toRightOf="@id/textView_record_period_hint"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textView_record_period_hint"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/horizontal_0_4"/>
 
     <android.support.constraint.Guideline
@@ -68,8 +68,8 @@
         android:scaleType="centerInside"
         android:src="@android:drawable/ic_media_play"
         app:layout_constraintTop_toBottomOf="@id/horizontal_0_4"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/horizontal_0_9"/>
 
     <android.support.constraint.Guideline
@@ -88,8 +88,8 @@
         android:layout_alignParentBottom="true"
         ads:adSize="BANNER"
         ads:adUnitId="@string/admob_banner_unit_id_main_fragment"
-        ads:layout_constraintLeft_toLeftOf="parent"
-        ads:layout_constraintRight_toRightOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintTop_toBottomOf="@id/horizontal_0_9"
         ads:layout_constraintBottom_toBottomOf="parent"/>
 

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 26
     defaultConfig {
         applicationId "eu.wonderfulme.locationtracker"
         minSdkVersion 19
-        targetSdkVersion 27
-        versionCode 3
-        versionName "1.1.1"
+        targetSdkVersion 26
+        versionCode 4
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,11 +25,10 @@ android {
 }
 
 dependencies {
-    def support_sdk_version = "27.1.1"
+    def support_sdk_version = "26.1.0"
     def room_version = "1.1.1-rc1"
     def play_services_version = "15.0.1"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    //noinspection GradleCompatible
     implementation "com.android.support:appcompat-v7:$support_sdk_version"
     implementation "com.android.support:support-v4:$support_sdk_version"
     implementation "com.android.support:design:$support_sdk_version"
