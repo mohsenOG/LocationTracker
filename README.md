@@ -1,4 +1,4 @@
-# Location Tracker [Google Play Link](https://play.google.com/store/apps/details?id=eu.wonderfulme.locationtracker)
+# Location Tracker
 <img src="InkscapeFiles/featureGraphic.png">
 
 ## Overview:
@@ -8,6 +8,8 @@ Location tracker is the easiest way to save your location in background and expo
 
 Just open the app, click on the Play button and done! Put the app on background while it saves location.
 By clicking on Stop icon, you will get a CSV file in your Downloads. Is easier possible?!
+
+[Google Play Link](https://play.google.com/store/apps/details?id=eu.wonderfulme.locationtracker)
 
 ## Third-party libraries
 * [OpenCSV](http://opencsv.sourceforge.net/)
