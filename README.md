@@ -1,4 +1,4 @@
-# Location Tracker
+# Location Tracker [Google Play Link](https://play.google.com/store/apps/details?id=eu.wonderfulme.locationtracker)
 <img src="InkscapeFiles/featureGraphic.png">
 
 ## Overview:
